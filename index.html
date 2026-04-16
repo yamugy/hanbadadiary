@@ -25,7 +25,6 @@
 --text: #dde3ef;
 --text2: #a8b2c8;
 --text-muted: #5a6478;
---warning: #c9a84c;
 --safe-top: env(safe-area-inset-top, 0px);
 --safe-bot: env(safe-area-inset-bottom, 0px);
 --radius: 10px;
@@ -34,57 +33,73 @@
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
 html, body {
-height: 100%;
-overflow: hidden;
-font-family: 'Noto Sans KR', sans-serif;
-background: var(--bg);
-color: var(--text);
-font-size: 15px;
--webkit-font-smoothing: antialiased;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Noto Sans KR', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
-display: flex;
-flex-direction: column;
-height: 100dvh;
-max-width: 640px;
-margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
+/* ─── HEADER ─── */
 header {
-background: var(--surface);
-border-bottom: 1px solid var(--border);
-padding: 13px 18px;
-padding-top: calc(13px + var(--safe-top));
-display: flex;
-align-items: center;
-justify-content: space-between;
-flex-shrink: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 13px 18px;
+  padding-top: calc(13px + var(--safe-top));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
 }
-
-.logo {
-font-family: 'JetBrains Mono', monospace;
-font-size: 18px;
-font-weight: 700;
-color: var(--accent);
-letter-spacing: 3px;
-}
+.logo { font-family: 'JetBrains Mono', monospace; font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 3px; }
 .logo span { color: var(--accent2); }
 
+/* ─── NAV TABS ─── */
+.nav-tabs {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.nav-tab {
+  flex: 1;
+  padding: 11px 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  user-select: none;
+}
+.nav-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.nav-tab:active { opacity: 0.7; }
+
+/* ─── PAGES ─── */
 .page { flex: 1; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; display: none; }
 .page.active { display: flex; flex-direction: column; }
 
+/* ─── LIST ─── */
 .list-toolbar { padding: 14px 16px 10px; display: flex; gap: 10px; }
-
 .log-cards { padding: 0 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; padding-bottom: 28px; }
-
 .log-card {
-background: var(--surface);
-border: 1px solid var(--border);
-border-radius: var(--radius);
-padding: 14px 16px;
-cursor: pointer;
-transition: border-color 0.15s;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: border-color 0.15s;
 }
 .log-card:active { border-color: var(--accent); opacity: 0.85; }
 .log-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
@@ -92,16 +107,51 @@ transition: border-color 0.15s;
 .log-card-type { font-size: 11px; background: var(--accent-dim); border: 1px solid rgba(79,195,161,0.25); color: var(--accent); padding: 2px 9px; border-radius: 20px; }
 .log-card-name { font-size: 16px; font-weight: 700; color: var(--text); }
 .log-card-venue { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
-
 .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 1; gap: 14px; text-align: center; color: var(--text-muted); padding: 40px 20px; }
 .empty-icon { font-size: 52px; opacity: 0.3; }
 
+/* ─── MD STORAGE PAGE ─── */
+.md-storage-toolbar { padding: 14px 16px 10px; display: flex; gap: 10px; align-items: center; }
+.md-storage-title { font-size: 13px; color: var(--text-muted); flex: 1; }
+.md-file-cards { padding: 0 16px; flex: 1; display: flex; flex-direction: column; gap: 10px; padding-bottom: 28px; }
+.md-file-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.md-file-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+.md-file-info { flex: 1; min-width: 0; }
+.md-file-name { font-size: 14px; font-weight: 700; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.md-file-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+.md-file-saved { font-size: 11px; color: var(--accent); margin-top: 3px; }
+.md-file-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.md-btn-sm {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  color: var(--text2);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: 'Noto Sans KR', sans-serif;
+  white-space: nowrap;
+}
+.md-btn-sm:active { opacity: 0.7; }
+.md-btn-sm.danger { color: var(--accent2); border-color: rgba(224,123,84,0.3); }
+.md-btn-sm.primary { color: var(--accent); border-color: rgba(79,195,161,0.35); }
+
+/* ─── FORM ─── */
 .form-top-bar {
-display: flex; align-items: center; gap: 10px;
-padding: 12px 16px;
-background: var(--surface);
-border-bottom: 1px solid var(--border);
-flex-shrink: 0;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
 }
 .back-btn { background: none; border: none; color: var(--accent); font-size: 28px; cursor: pointer; padding: 0 6px; line-height: 1; flex-shrink: 0; }
 .form-top-title { flex: 1; font-weight: 700; font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -111,13 +161,14 @@ flex-shrink: 0;
 .form-scroll { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 .form-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 11px; }
 
+/* ─── SECTION ─── */
 .section-block { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
 .section-header {
-padding: 14px 15px;
-background: var(--surface2);
-display: flex; align-items: center; justify-content: space-between;
-cursor: pointer; user-select: none; -webkit-user-select: none;
-border-bottom: 1px solid var(--border);
+  padding: 14px 15px;
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; -webkit-user-select: none;
+  border-bottom: 1px solid var(--border);
 }
 .section-header:active { opacity: 0.8; }
 .section-block.collapsed .section-header { border-bottom: none; }
@@ -129,95 +180,111 @@ border-bottom: 1px solid var(--border);
 .section-content { padding: 15px; }
 .section-block.collapsed .section-content { display: none; }
 
+/* ─── FIELDS ─── */
 .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 13px; }
 .field:last-child { margin-bottom: 0; }
 .field-row { display: grid; gap: 10px; margin-bottom: 13px; }
 .field-row.two { grid-template-columns: 1fr 1fr; }
 .field-row:last-child { margin-bottom: 0; }
 
-label {
-font-size: 12px;
-font-weight: 600;
-color: var(--text2);
-letter-spacing: 0.5px;
-}
+label { font-size: 12px; font-weight: 600; color: var(--text2); letter-spacing: 0.5px; }
 
 input[type=text], input[type=tel], select, textarea {
-background: var(--surface2);
-border: 1px solid var(--border2);
-border-radius: 8px;
-color: var(--text);
-font-family: 'Noto Sans KR', sans-serif;
-font-size: 15px;
-padding: 12px 13px;
-outline: none;
-width: 100%;
--webkit-appearance: none;
-appearance: none;
-transition: border-color 0.15s;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 15px;
+  padding: 12px 13px;
+  outline: none;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.15s;
 }
 input[type=time] {
-background: var(--surface2);
-border: 1px solid var(--border2);
-border-radius: 8px;
-color: var(--text);
-font-family: 'JetBrains Mono', monospace;
-font-size: 15px;
-padding: 11px 12px;
-outline: none;
-width: 100%;
--webkit-appearance: none;
-appearance: none;
-transition: border-color 0.15s;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  padding: 11px 12px;
+  outline: none;
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  transition: border-color 0.15s;
 }
 input:focus, select:focus, textarea:focus { border-color: var(--accent); }
 textarea { resize: none; min-height: 82px; line-height: 1.6; }
 select {
-background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right 13px center;
-padding-right: 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%235a6478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  padding-right: 38px;
 }
 select option { background: #181c24; }
 
+/* ─── 날씨 복수 선택 ─── */
+.weather-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 7px;
+}
+.weather-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 9px 5px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all 0.15s;
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.weather-opt:active { opacity: 0.75; }
+.weather-opt.selected { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
+.weather-emoji { font-size: 20px; }
+
+/* ─── TOGGLE ─── */
 .toggle-group { display: flex; gap: 8px; }
 .toggle-opt {
-display: flex; align-items: center; gap: 7px;
-padding: 10px 14px;
-border-radius: 8px;
-border: 1.5px solid var(--border2);
-background: var(--surface2);
-cursor: pointer;
-font-size: 14px;
-font-weight: 600;
-color: var(--text-muted);
-transition: all 0.15s;
-user-select: none;
--webkit-user-select: none;
-flex: 1;
-justify-content: center;
+  display: flex; align-items: center; gap: 7px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface2);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  user-select: none; -webkit-user-select: none;
+  flex: 1;
+  justify-content: center;
 }
 .toggle-opt:active { opacity: 0.8; }
 .toggle-opt.selected-yes { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
 .toggle-opt.selected-no  { border-color: var(--accent2); background: var(--accent2-dim); color: var(--accent2); }
-.toggle-check {
-width: 19px; height: 19px;
-border-radius: 50%;
-border: 2px solid currentColor;
-display: flex; align-items: center; justify-content: center;
-flex-shrink: 0;
-font-size: 11px;
-}
+.toggle-check { width: 19px; height: 19px; border-radius: 50%; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; }
 
 .sub-form {
-background: var(--surface3);
-border: 1px solid var(--border);
-border-radius: 8px;
-padding: 12px;
-margin-top: 10px;
-display: flex;
-flex-direction: column;
-gap: 10px;
+  background: var(--surface3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .sub-form label { color: var(--text-muted); font-size: 11px; }
 
@@ -228,28 +295,29 @@ gap: 10px;
 
 .stair-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .stair-item {
-display: flex; align-items: center; gap: 8px;
-padding: 10px 12px;
-background: var(--surface2);
-border: 1.5px solid var(--border2);
-border-radius: 8px;
-cursor: pointer;
-user-select: none; -webkit-user-select: none;
-font-size: 14px;
-font-weight: 600;
-color: var(--text-muted);
-transition: all 0.15s;
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 12px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 8px;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
+  font-size: 14px; font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s;
 }
 .stair-item:active { opacity: 0.8; }
 .stair-item.checked { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
 .stair-check { width: 18px; height: 18px; border-radius: 4px; border: 2px solid currentColor; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 11px; }
 
+/* ─── TIMELINE ─── */
 .tl-group-label { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase; padding: 8px 0 5px; border-bottom: 1px solid var(--border); margin-bottom: 5px; font-weight: 700; }
 .timeline-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(37,45,61,0.8); }
 .timeline-item:last-child { border-bottom: none; }
 .timeline-label { font-size: 14px; color: var(--text2); width: 100px; flex-shrink: 0; }
 .timeline-item input[type=time] { flex: 1; padding: 10px 12px; }
 
+/* ─── REHEARSAL ─── */
 .rh-card { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 11px 13px; margin-bottom: 8px; }
 .rh-card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
 .rh-card-top input { flex: 1; }
@@ -258,90 +326,60 @@ transition: all 0.15s;
 .rh-time-field { display: flex; flex-direction: column; gap: 5px; }
 .rh-time-field label { font-size: 11px; }
 
-/* ─── 체크리스트 (장비 선택형) ─── */
-.check-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.check-item {
-display: flex; align-items: center; gap: 8px;
-padding: 11px 10px;
-background: var(--surface2);
-border: 1.5px solid var(--border2);
-border-radius: 8px;
-cursor: pointer;
-transition: all 0.15s;
-user-select: none; -webkit-user-select: none;
-}
-.check-item:active { transform: scale(0.96); }
-.check-item.checked { border-color: var(--accent); background: var(--accent-dim); }
-.check-item.checked .check-box { background: var(--accent); border-color: var(--accent); }
-.check-box { width: 20px; height: 20px; border-radius: 4px; border: 1.5px solid var(--border2); flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
-.check-box svg { display: none; }
-.check-item.checked .check-box svg { display: block; }
-.check-label { font-size: 13px; color: var(--text-muted); line-height: 1.3; }
-.check-item.checked .check-label { color: var(--text); font-weight: 600; }
-
-.progress-bar-wrap { background: var(--surface2); border-radius: 4px; height: 5px; margin-bottom: 12px; overflow: hidden; }
-.progress-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; transition: width 0.3s; }
-.progress-text { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); margin-bottom: 8px; }
-
-/* 장비 선택 카드 (콘솔/스피커) */
+/* ─── 장비 선택 (콘솔/스피커) ─── */
 .equip-select-block { margin-bottom: 14px; }
 .equip-select-block:last-child { margin-bottom: 0; }
 .equip-select-label { font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: 0.5px; margin-bottom: 8px; }
 .equip-option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .equip-opt {
-display: flex; align-items: center; gap: 8px;
-padding: 11px 12px;
-background: var(--surface2);
-border: 1.5px solid var(--border2);
-border-radius: 8px;
-cursor: pointer;
-font-size: 13px; font-weight: 600;
-color: var(--text-muted);
-transition: all 0.15s;
-user-select: none; -webkit-user-select: none;
+  display: flex; align-items: center; gap: 8px;
+  padding: 11px 12px;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px; font-weight: 600;
+  color: var(--text-muted);
+  transition: all 0.15s;
+  user-select: none; -webkit-user-select: none;
 }
 .equip-opt:active { opacity: 0.8; }
 .equip-opt.selected { border-color: var(--accent); background: var(--accent-dim); color: var(--accent); }
 .equip-opt-dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid currentColor; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; }
 .equip-custom-input { margin-top: 8px; }
 
-/* 모니터 스피커 세팅 체크 */
+/* ─── 모니터 스피커 세팅 ─── */
 .monitor-check-list { display: flex; flex-direction: column; gap: 10px; }
 .monitor-check-item {
-background: var(--surface2);
-border: 1.5px solid var(--border2);
-border-radius: 8px;
-overflow: hidden;
-transition: border-color 0.15s;
+  background: var(--surface2);
+  border: 1.5px solid var(--border2);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.15s;
 }
 .monitor-check-item.checked { border-color: var(--accent); }
 .monitor-check-row {
-display: flex; align-items: center; gap: 10px;
-padding: 12px 14px;
-cursor: pointer;
-user-select: none; -webkit-user-select: none;
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  user-select: none; -webkit-user-select: none;
 }
 .monitor-check-row:active { opacity: 0.8; }
 .monitor-check-box {
-width: 22px; height: 22px; border-radius: 5px;
-border: 2px solid var(--border2);
-flex-shrink: 0;
-display: flex; align-items: center; justify-content: center;
-transition: all 0.15s;
+  width: 22px; height: 22px; border-radius: 5px;
+  border: 2px solid var(--border2);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s;
 }
 .monitor-check-item.checked .monitor-check-box { background: var(--accent); border-color: var(--accent); }
 .monitor-check-name { font-size: 14px; font-weight: 600; color: var(--text-muted); flex: 1; }
 .monitor-check-item.checked .monitor-check-name { color: var(--text); }
-.monitor-memo-area {
-padding: 0 14px 12px;
-display: none;
-}
+.monitor-memo-area { padding: 0 14px 12px; display: none; }
 .monitor-check-item.checked .monitor-memo-area { display: block; }
-.monitor-memo-area textarea {
-min-height: 60px;
-font-size: 13px;
-}
+.monitor-memo-area textarea { min-height: 60px; font-size: 13px; }
 
+/* ─── EQUIPMENT ─── */
 .eq-item-card { background: var(--surface2); border: 1px solid var(--border2); border-radius: var(--radius); padding: 12px; margin-bottom: 8px; }
 .eq-item-card:last-child { margin-bottom: 0; }
 .eq-item-top { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
@@ -354,6 +392,7 @@ font-size: 13px;
 
 .md-preview { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 14px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--accent); white-space: pre-wrap; line-height: 1.8; overflow-x: auto; display: none; margin-top: 4px; }
 
+/* ─── BOTTOM ACTIONS ─── */
 .bottom-actions { display: flex; gap: 8px; padding: 12px 16px; padding-bottom: calc(12px + var(--safe-bot)); background: var(--surface); border-top: 1px solid var(--border); flex-shrink: 0; }
 
 .btn { padding: 13px 14px; border-radius: 10px; font-size: 14px; font-weight: 700; cursor: pointer; border: none; font-family: 'Noto Sans KR', sans-serif; transition: opacity 0.15s; }
@@ -363,6 +402,54 @@ font-size: 13px;
 .btn-danger { background: var(--accent2-dim); color: var(--accent2); border: 1px solid rgba(224,123,84,0.3); }
 .btn-new { background: var(--accent); color: #0a0c10; flex: 1; }
 
+/* ─── MODAL (덮어쓰기 확인) ─── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 900;
+  display: flex; align-items: flex-end; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.show { opacity: 1; pointer-events: all; }
+.modal-sheet {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 0 0;
+  padding: 20px 20px;
+  padding-bottom: calc(20px + var(--safe-bot));
+  width: 100%;
+  max-width: 640px;
+  transform: translateY(40px);
+  transition: transform 0.25s;
+}
+.modal-overlay.show .modal-sheet { transform: translateY(0); }
+.modal-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.modal-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.6; }
+.modal-filename {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  word-break: break-all;
+}
+.modal-actions { display: flex; gap: 10px; }
+.modal-btn {
+  flex: 1; padding: 13px; border-radius: 10px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer; border: none;
+  font-family: 'Noto Sans KR', sans-serif;
+}
+.modal-btn:active { opacity: 0.75; }
+.modal-btn-cancel { background: var(--surface2); color: var(--text2); border: 1px solid var(--border2); }
+.modal-btn-overwrite { background: var(--accent2); color: #fff; }
+.modal-btn-new { background: var(--accent); color: #0a0c10; }
+
+/* ─── TOAST ─── */
 .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(16px); background: var(--accent); color: #0a0c10; padding: 10px 26px; border-radius: 24px; font-weight: 700; font-size: 13px; z-index: 999; opacity: 0; transition: all 0.25s; white-space: nowrap; pointer-events: none; }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -377,6 +464,12 @@ font-size: 13px;
     <span id="headerDate" style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--text-muted);"></span>
   </header>
 
+  <!-- NAV TABS -->
+  <div class="nav-tabs">
+    <div class="nav-tab active" id="tab-list" onclick="switchTab('list')">📋 작업일지</div>
+    <div class="nav-tab" id="tab-mdstore" onclick="switchTab('mdstore')">📂 MD 저장소</div>
+  </div>
+
   <!-- LIST PAGE -->
   <div class="page active" id="pageList">
     <div class="list-toolbar">
@@ -384,6 +477,15 @@ font-size: 13px;
       <button class="btn btn-secondary" onclick="exportAllMD()">📄 전체MD</button>
     </div>
     <div class="log-cards" id="logCards"></div>
+  </div>
+
+  <!-- MD STORAGE PAGE -->
+  <div class="page" id="pageMdStore">
+    <div class="md-storage-toolbar">
+      <span class="md-storage-title" id="mdStoreCount">저장된 MD 없음</span>
+      <button class="btn btn-secondary" onclick="clearAllMdStore()" style="font-size:12px;padding:8px 12px;">전체 삭제</button>
+    </div>
+    <div class="md-file-cards" id="mdFileCards"></div>
   </div>
 
   <!-- FORM PAGE -->
@@ -404,28 +506,25 @@ font-size: 13px;
             <span class="section-chevron">▼</span>
           </div>
           <div class="section-content">
-            <!-- 날씨 추가 -->
-            <div class="field-row two">
-              <div class="field" style="margin-bottom:0">
-                <label>날짜</label>
-                <input id="f_date" type="date" oninput="updateTitle()">
-              </div>
-              <div class="field" style="margin-bottom:0">
-                <label>날씨</label>
-                <select id="f_weather">
-                  <option value="">선택</option>
-                  <option>☀️ 맑음</option>
-                  <option>⛅ 구름조금</option>
-                  <option>☁️ 흐림</option>
-                  <option>🌧️ 비</option>
-                  <option>⛈️ 폭우</option>
-                  <option>🌨️ 눈</option>
-                  <option>💨 바람</option>
-                  <option>🌫️ 안개</option>
-                </select>
+            <!-- 날짜 + 날씨 복수선택 -->
+            <div class="field" style="margin-bottom:13px">
+              <label>날짜</label>
+              <input id="f_date" type="date" oninput="updateTitle()">
+            </div>
+            <div class="field" style="margin-bottom:13px">
+              <label>날씨 (복수 선택 가능)</label>
+              <div class="weather-grid" id="weatherGrid">
+                <div class="weather-opt" data-val="맑음" onclick="toggleWeather(this)"><span class="weather-emoji">☀️</span>맑음</div>
+                <div class="weather-opt" data-val="구름조금" onclick="toggleWeather(this)"><span class="weather-emoji">⛅</span>구름조금</div>
+                <div class="weather-opt" data-val="흐림" onclick="toggleWeather(this)"><span class="weather-emoji">☁️</span>흐림</div>
+                <div class="weather-opt" data-val="비" onclick="toggleWeather(this)"><span class="weather-emoji">🌧️</span>비</div>
+                <div class="weather-opt" data-val="폭우" onclick="toggleWeather(this)"><span class="weather-emoji">⛈️</span>폭우</div>
+                <div class="weather-opt" data-val="눈" onclick="toggleWeather(this)"><span class="weather-emoji">🌨️</span>눈</div>
+                <div class="weather-opt" data-val="바람" onclick="toggleWeather(this)"><span class="weather-emoji">💨</span>바람</div>
+                <div class="weather-opt" data-val="안개" onclick="toggleWeather(this)"><span class="weather-emoji">🌫️</span>안개</div>
               </div>
             </div>
-            <div class="field-row two" style="margin-top:11px">
+            <div class="field-row two">
               <div class="field" style="margin-bottom:0">
                 <label>행사 유형</label>
                 <select id="f_eventType">
@@ -436,7 +535,6 @@ font-size: 13px;
                   <option>페스티벌</option>
                   <option>종교행사</option>
                   <option>스포츠</option>
-                  <!-- 추가된 장소 -->
                   <option>통영국제음악당</option>
                   <option>통영시청</option>
                   <option>기타</option>
@@ -474,22 +572,12 @@ font-size: 13px;
             <div class="field" style="margin-top:6px">
               <label>아나운서 섭외</label>
               <div class="toggle-group">
-                <div class="toggle-opt" id="ann_yes" onclick="toggleAnnouncer(true)">
-                  <div class="toggle-check" id="ann_yes_check"></div>있음
-                </div>
-                <div class="toggle-opt" id="ann_no" onclick="toggleAnnouncer(false)">
-                  <div class="toggle-check" id="ann_no_check"></div>없음
-                </div>
+                <div class="toggle-opt" id="ann_yes" onclick="toggleAnnouncer(true)"><div class="toggle-check" id="ann_yes_check"></div>있음</div>
+                <div class="toggle-opt" id="ann_no" onclick="toggleAnnouncer(false)"><div class="toggle-check" id="ann_no_check"></div>없음</div>
               </div>
               <div class="sub-form" id="announcerForm" style="display:none">
-                <div class="field">
-                  <label>아나운서 이름</label>
-                  <input id="f_announcerName" type="text" placeholder="이름">
-                </div>
-                <div class="field" style="margin:0">
-                  <label>연락처</label>
-                  <input id="f_announcerTel" type="tel" placeholder="010-0000-0000">
-                </div>
+                <div class="field"><label>아나운서 이름</label><input id="f_announcerName" type="text" placeholder="이름"></div>
+                <div class="field" style="margin:0"><label>연락처</label><input id="f_announcerTel" type="tel" placeholder="010-0000-0000"></div>
               </div>
             </div>
           </div>
@@ -503,14 +591,8 @@ font-size: 13px;
           </div>
           <div class="section-content">
             <div class="tl-group-label">콜타임</div>
-            <div class="timeline-item">
-              <span class="timeline-label">🔊 음향설치시작</span>
-              <input id="f_callTimeSound" type="time">
-            </div>
-            <div class="timeline-item" style="margin-bottom:10px">
-              <span class="timeline-label">🎪 무대설치시작</span>
-              <input id="f_callTimeStage" type="time">
-            </div>
+            <div class="timeline-item"><span class="timeline-label">🔊 음향설치시작</span><input id="f_callTimeSound" type="time"></div>
+            <div class="timeline-item" style="margin-bottom:10px"><span class="timeline-label">🎪 무대설치시작</span><input id="f_callTimeStage" type="time"></div>
             <div class="tl-group-label">리허설</div>
             <div id="rehearsalList"></div>
             <button class="add-row-btn" onclick="addRehearsal()" style="margin-bottom:10px">＋ 리허설 팀 추가</button>
@@ -521,52 +603,33 @@ font-size: 13px;
           </div>
         </div>
 
-        <!-- 설치 체크리스트 (콘솔/스피커 선택형) -->
+        <!-- 설치 체크리스트 -->
         <div class="section-block collapsed" id="sec3">
           <div class="section-header" onclick="toggleSection('sec3')">
             <div class="section-header-left"><span class="section-icon">✅</span><span class="section-title">설치 체크리스트</span></div>
             <span class="section-chevron">▼</span>
           </div>
           <div class="section-content">
-
-            <!-- 콘솔 선택 -->
             <div class="equip-select-block">
               <div class="equip-select-label">🎛️ 콘솔</div>
               <div class="equip-option-grid" id="consoleGrid">
-                <div class="equip-opt" data-val="Midas" onclick="selectEquipOpt(this,'console')">
-                  <div class="equip-opt-dot"></div>Midas
-                </div>
-                <div class="equip-opt" data-val="Allen &amp; Heath" onclick="selectEquipOpt(this,'console')">
-                  <div class="equip-opt-dot"></div>Allen &amp; Heath
-                </div>
-                <div class="equip-opt" data-val="Wing" onclick="selectEquipOpt(this,'console')">
-                  <div class="equip-opt-dot"></div>Wing
-                </div>
-                <div class="equip-opt" data-val="Yamaha" onclick="selectEquipOpt(this,'console')">
-                  <div class="equip-opt-dot"></div>Yamaha
-                </div>
+                <div class="equip-opt" data-val="Midas" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Midas</div>
+                <div class="equip-opt" data-val="Allen &amp; Heath" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Allen &amp; Heath</div>
+                <div class="equip-opt" data-val="Wing" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Wing</div>
+                <div class="equip-opt" data-val="Yamaha" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Yamaha</div>
               </div>
             </div>
-
-            <!-- 스피커 선택 -->
             <div class="equip-select-block">
               <div class="equip-select-label">🔊 스피커</div>
               <div class="equip-option-grid" id="speakerGrid">
-                <div class="equip-opt" data-val="d&amp;b" onclick="selectEquipOpt(this,'speaker')">
-                  <div class="equip-opt-dot"></div>d&amp;b
-                </div>
-                <div class="equip-opt" data-val="JBL" onclick="selectEquipOpt(this,'speaker')">
-                  <div class="equip-opt-dot"></div>JBL
-                </div>
-                <div class="equip-opt" data-val="custom" onclick="selectEquipOpt(this,'speaker')">
-                  <div class="equip-opt-dot"></div>직접입력
-                </div>
+                <div class="equip-opt" data-val="d&amp;b" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>d&amp;b</div>
+                <div class="equip-opt" data-val="JBL" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>JBL</div>
+                <div class="equip-opt" data-val="custom" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>직접입력</div>
               </div>
               <div class="equip-custom-input" id="speakerCustomWrap" style="display:none">
                 <input id="f_speakerCustom" type="text" placeholder="스피커 브랜드/모델 직접 입력">
               </div>
             </div>
-
           </div>
         </div>
 
@@ -589,82 +652,44 @@ font-size: 13px;
             <span class="section-chevron">▼</span>
           </div>
           <div class="section-content">
-
-            <!-- 무대 크기 (새로 추가) -->
             <div class="field" style="margin-bottom:14px">
               <label>무대 크기</label>
               <div class="dimension-row" style="margin-top:0">
-                <div class="dim-field">
-                  <label>가로 - 무대정면 (m)</label>
-                  <input id="f_stageW" type="text" placeholder="예: 12.0">
-                </div>
-                <div class="dim-field">
-                  <label>세로 (m)</label>
-                  <input id="f_stageD" type="text" placeholder="예: 8.0">
-                </div>
+                <div class="dim-field"><label>가로 - 무대정면 (m)</label><input id="f_stageW" type="text" placeholder="예: 12.0"></div>
+                <div class="dim-field"><label>세로 (m)</label><input id="f_stageD" type="text" placeholder="예: 8.0"></div>
               </div>
             </div>
-
-            <!-- 플랭카드 -->
             <div class="field" style="margin-bottom:14px">
               <label>플랭카드 설치</label>
               <div class="toggle-group">
-                <div class="toggle-opt" id="banner_yes" onclick="toggleBanner(true)">
-                  <div class="toggle-check" id="banner_yes_check"></div>있음
-                </div>
-                <div class="toggle-opt" id="banner_no" onclick="toggleBanner(false)">
-                  <div class="toggle-check" id="banner_no_check"></div>없음
-                </div>
+                <div class="toggle-opt" id="banner_yes" onclick="toggleBanner(true)"><div class="toggle-check" id="banner_yes_check"></div>있음</div>
+                <div class="toggle-opt" id="banner_no" onclick="toggleBanner(false)"><div class="toggle-check" id="banner_no_check"></div>없음</div>
               </div>
               <div id="bannerDimForm" style="display:none">
                 <div class="dimension-row">
-                  <div class="dim-field">
-                    <label>가로 (m)</label>
-                    <input id="f_bannerW" type="text" placeholder="예: 3.0">
-                  </div>
-                  <div class="dim-field">
-                    <label>세로 (m)</label>
-                    <input id="f_bannerH" type="text" placeholder="예: 0.9">
-                  </div>
+                  <div class="dim-field"><label>가로 (m)</label><input id="f_bannerW" type="text" placeholder="예: 3.0"></div>
+                  <div class="dim-field"><label>세로 (m)</label><input id="f_bannerH" type="text" placeholder="예: 0.9"></div>
                 </div>
               </div>
             </div>
-
-            <!-- 트러스 (단위: 미터) -->
             <div class="field" style="margin-bottom:14px">
               <label>트러스 설치</label>
               <div class="toggle-group">
-                <div class="toggle-opt" id="truss_yes" onclick="toggleTruss(true)">
-                  <div class="toggle-check" id="truss_yes_check"></div>있음
-                </div>
-                <div class="toggle-opt" id="truss_no" onclick="toggleTruss(false)">
-                  <div class="toggle-check" id="truss_no_check"></div>없음
-                </div>
+                <div class="toggle-opt" id="truss_yes" onclick="toggleTruss(true)"><div class="toggle-check" id="truss_yes_check"></div>있음</div>
+                <div class="toggle-opt" id="truss_no" onclick="toggleTruss(false)"><div class="toggle-check" id="truss_no_check"></div>없음</div>
               </div>
               <div id="trussDimForm" style="display:none">
                 <div class="dimension-row">
-                  <div class="dim-field">
-                    <label>가로 (m)</label>
-                    <input id="f_trussW" type="text" placeholder="예: 6.0">
-                  </div>
-                  <div class="dim-field">
-                    <label>세로 (m)</label>
-                    <input id="f_trussH" type="text" placeholder="예: 4.0">
-                  </div>
+                  <div class="dim-field"><label>가로 (m)</label><input id="f_trussW" type="text" placeholder="예: 6.0"></div>
+                  <div class="dim-field"><label>세로 (m)</label><input id="f_trussH" type="text" placeholder="예: 4.0"></div>
                 </div>
               </div>
             </div>
-
-            <!-- 계단 -->
             <div class="field">
               <label>계단 설치</label>
               <div class="toggle-group">
-                <div class="toggle-opt" id="stair_yes" onclick="toggleStair(true)">
-                  <div class="toggle-check" id="stair_yes_check"></div>있음
-                </div>
-                <div class="toggle-opt" id="stair_no" onclick="toggleStair(false)">
-                  <div class="toggle-check" id="stair_no_check"></div>없음
-                </div>
+                <div class="toggle-opt" id="stair_yes" onclick="toggleStair(true)"><div class="toggle-check" id="stair_yes_check"></div>있음</div>
+                <div class="toggle-opt" id="stair_no" onclick="toggleStair(false)"><div class="toggle-check" id="stair_no_check"></div>없음</div>
               </div>
               <div id="stairPosForm" style="display:none">
                 <div class="stair-grid" id="stairGrid">
@@ -679,7 +704,7 @@ font-size: 13px;
           </div>
         </div>
 
-        <!-- 모니터 스피커 세팅 (변경) -->
+        <!-- 모니터 스피커 세팅 -->
         <div class="section-block collapsed" id="sec6">
           <div class="section-header" onclick="toggleSection('sec6')">
             <div class="section-header-left"><span class="section-icon">🔊</span><span class="section-title">모니터 스피커 세팅</span></div>
@@ -722,9 +747,23 @@ font-size: 13px;
 
     <div class="bottom-actions">
       <button class="btn btn-secondary" onclick="toggleMDPreview()">MD</button>
-      <button class="btn btn-secondary" onclick="exportMD()">💾</button>
+      <button class="btn btn-secondary" onclick="saveMDToStore()">💾 MD저장</button>
       <button class="btn btn-danger" onclick="deleteLog()">삭제</button>
       <button class="btn btn-primary" onclick="saveLog()">✓ 저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- 덮어쓰기 확인 모달 -->
+<div class="modal-overlay" id="overwriteModal">
+  <div class="modal-sheet">
+    <div class="modal-title">📄 이미 저장된 MD가 있습니다</div>
+    <div class="modal-desc">동일한 이름의 MD 파일이 저장소에 있습니다.<br>덮어쓰기하거나 새 버전으로 저장할 수 있습니다.</div>
+    <div class="modal-filename" id="modalFilename"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">취소</button>
+      <button class="modal-btn modal-btn-overwrite" onclick="doMDSave('overwrite')">덮어쓰기</button>
+      <button class="modal-btn modal-btn-new" onclick="doMDSave('new')">새 버전</button>
     </div>
   </div>
 </div>
@@ -732,42 +771,75 @@ font-size: 13px;
 <div class="toast" id="toast"></div>
 
 <script>
-// ── 모니터 스피커 세팅 항목 ──
+// ── 상수 ──
 const MONITOR_ITEMS = [
-  { key: 'basic',   label: '1. 기본세팅' },
-  { key: 'sidefill', label: '2. 사이드필' },
+  { key: 'basic',     label: '1. 기본세팅' },
+  { key: 'sidefill',  label: '2. 사이드필' },
   { key: 'frontfill', label: '3. 프런트필' },
-  { key: 'delay',   label: '4. 딜레이스피커' },
-  { key: 'inear',   label: '5. 인이어' },
+  { key: 'delay',     label: '4. 딜레이스피커' },
+  { key: 'inear',     label: '5. 인이어' },
 ];
 
-// 콘솔/스피커 선택 상태
+// ── 상태 ──
+let logs        = JSON.parse(localStorage.getItem('soundlogs')  || '[]');
+let mdStore     = JSON.parse(localStorage.getItem('mdStore')    || '[]');
+// mdStore 항목: { id, filename, content, savedAt, logId }
+
+let currentId       = null;
+let monitorChecks   = {};
 let consoleSelected = '';
 let speakerSelected = '';
+let weatherSelected = [];   // 복수 선택 배열
+let announcerHas    = null;
+let bannerHas       = null;
+let trussHas        = null;
+let stairHas        = null;
 
-let logs = JSON.parse(localStorage.getItem('soundlogs') || '[]');
-let currentId = null;
-let monitorChecks = {};   // { key: { checked: bool, memo: '' } }
-let announcerHas = null;
-let bannerHas = null;
-let trussHas = null;
-let stairHas = null;
+// 모달에서 사용할 임시 변수
+let _pendingMDContent  = '';
+let _pendingMDFilename = '';
+let _pendingMDLogId    = '';
 
+// ── 날짜 ──
 function today() { return new Date().toISOString().split('T')[0]; }
 function fmtDate(d) { return d ? d.replace(/-/g,'.') : ''; }
-
 document.getElementById('headerDate').textContent = fmtDate(today());
+
+// ── 탭 전환 ──
+function switchTab(tab) {
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+
+  if (tab === 'list') {
+    document.getElementById('tab-list').classList.add('active');
+    const p = document.getElementById('pageList');
+    p.style.display = 'flex';
+    p.classList.add('active');
+    renderList();
+  } else {
+    document.getElementById('tab-mdstore').classList.add('active');
+    const p = document.getElementById('pageMdStore');
+    p.style.display = 'flex';
+    p.classList.add('active');
+    renderMdStore();
+  }
+}
 
 // ── 페이지 전환 ──
 function showList() {
-  document.getElementById('pageList').classList.add('active');
-  document.getElementById('pageForm').classList.remove('active');
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+  const p = document.getElementById('pageList');
+  p.style.display = 'flex'; p.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-list').classList.add('active');
   renderList();
 }
 function showForm() {
-  document.getElementById('pageList').classList.remove('active');
-  document.getElementById('pageForm').classList.add('active');
-  document.getElementById('pageForm').querySelector('.form-scroll').scrollTop = 0;
+  document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display='none'; });
+  const p = document.getElementById('pageForm');
+  p.style.display = 'flex'; p.classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  p.querySelector('.form-scroll').scrollTop = 0;
 }
 
 // ── 리스트 렌더 ──
@@ -789,14 +861,132 @@ function renderList() {
   `).join('');
 }
 
+// ── MD 저장소 렌더 ──
+function renderMdStore() {
+  const count = document.getElementById('mdStoreCount');
+  const cards = document.getElementById('mdFileCards');
+  if (!mdStore.length) {
+    count.textContent = '저장된 MD 없음';
+    cards.innerHTML = `<div class="empty-state"><div class="empty-icon">📂</div><div>저장된 MD 파일이 없습니다<br>작업일지에서 MD저장을 눌러보세요</div></div>`;
+    return;
+  }
+  count.textContent = `총 ${mdStore.length}개 파일`;
+  cards.innerHTML = [...mdStore].reverse().map(f => `
+    <div class="md-file-card">
+      <div class="md-file-icon">📄</div>
+      <div class="md-file-info">
+        <div class="md-file-name">${f.filename}</div>
+        <div class="md-file-meta">${new Date(f.savedAt).toLocaleString('ko-KR')}</div>
+        <div class="md-file-saved">저장됨 ✓</div>
+      </div>
+      <div class="md-file-actions">
+        <button class="md-btn-sm primary" onclick="downloadMdFile('${f.id}')">⬇ 다운로드</button>
+        <button class="md-btn-sm" onclick="previewMdFile('${f.id}')">👁 미리보기</button>
+        <button class="md-btn-sm danger" onclick="deleteMdFile('${f.id}')">✕ 삭제</button>
+      </div>
+    </div>
+    <div class="md-preview" id="mdprev_${f.id}" style="margin: -8px 0 4px; border-radius:0 0 10px 10px;"></div>
+  `).join('');
+}
+
+function downloadMdFile(id) {
+  const f = mdStore.find(m => m.id === id);
+  if (!f) return;
+  const blob = new Blob([f.content], {type:'text/markdown'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = f.filename; a.click();
+  showToast('⬇ 다운로드 완료');
+}
+
+function previewMdFile(id) {
+  const el = document.getElementById('mdprev_' + id);
+  if (!el) return;
+  const f = mdStore.find(m => m.id === id);
+  if (!f) return;
+  if (el.style.display === 'block') { el.style.display = 'none'; }
+  else { el.textContent = f.content; el.style.display = 'block'; }
+}
+
+function deleteMdFile(id) {
+  if (!confirm('이 MD 파일을 삭제할까요?')) return;
+  mdStore = mdStore.filter(m => m.id !== id);
+  saveMdStoreData();
+  renderMdStore();
+  showToast('삭제 완료');
+}
+
+function clearAllMdStore() {
+  if (!mdStore.length) return;
+  if (!confirm(`저장된 MD ${mdStore.length}개를 모두 삭제할까요?`)) return;
+  mdStore = [];
+  saveMdStoreData();
+  renderMdStore();
+  showToast('전체 삭제 완료');
+}
+
+function saveMdStoreData() {
+  localStorage.setItem('mdStore', JSON.stringify(mdStore));
+}
+
+// ── MD 저장 (저장소에 저장) ──
+function saveMDToStore() {
+  const log = getFormData();
+  if (!log) return;
+  const content  = generateMD(log);
+  const filename = `${log.date}_${(log.eventName||'작업일지').replace(/\s/g,'_')}.md`;
+
+  _pendingMDContent  = content;
+  _pendingMDFilename = filename;
+  _pendingMDLogId    = log.id;
+
+  // 동일 파일명 또는 동일 logId 중복 체크
+  const existing = mdStore.find(m => m.filename === filename || m.logId === log.id);
+  if (existing) {
+    document.getElementById('modalFilename').textContent = filename;
+    document.getElementById('overwriteModal').classList.add('show');
+  } else {
+    doMDSave('new');
+  }
+}
+
+function closeModal() {
+  document.getElementById('overwriteModal').classList.remove('show');
+}
+
+function doMDSave(mode) {
+  closeModal();
+  if (mode === 'overwrite') {
+    // 동일 logId 또는 파일명 항목 제거 후 새로 저장
+    mdStore = mdStore.filter(m => m.filename !== _pendingMDFilename && m.logId !== _pendingMDLogId);
+  }
+  // 새 버전이면 파일명에 타임스탬프 붙이기
+  let filename = _pendingMDFilename;
+  if (mode === 'new') {
+    const existing = mdStore.find(m => m.filename === filename || m.logId === _pendingMDLogId);
+    if (existing) {
+      const ts = new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}).replace(/:/g,'');
+      filename = filename.replace('.md', `_v${ts}.md`);
+    }
+  }
+  mdStore.push({
+    id:      Date.now().toString(),
+    filename,
+    content: _pendingMDContent,
+    savedAt: new Date().toISOString(),
+    logId:   _pendingMDLogId
+  });
+  saveMdStoreData();
+  showToast('💾 MD 저장소에 저장 완료');
+}
+
 // ── 새 일지 ──
 function newLog() {
   currentId = Date.now().toString();
-  monitorChecks = {};
-  consoleSelected = ''; speakerSelected = '';
+  monitorChecks = {}; consoleSelected = ''; speakerSelected = '';
+  weatherSelected = [];
   announcerHas = null; bannerHas = null; trussHas = null; stairHas = null;
   const log = {
-    id: currentId, date: today(), weather:'', eventName:'', clientManager:'', venue:'', eventType:'콘서트',
+    id: currentId, date: today(), weather:[], eventName:'', clientManager:'', venue:'', eventType:'콘서트',
     engineer:'', stagedirector:'', staff1:'', staff2:'',
     announcerHas: null, announcerName:'', announcerTel:'',
     callTimeSound:'', callTimeStage:'', rehearsals:[], showTime:'', endTime:'', teardownEnd:'',
@@ -819,49 +1009,50 @@ function newLog() {
 function editLog(id) {
   currentId = id;
   const log = logs.find(l => l.id === id);
-  monitorChecks = JSON.parse(JSON.stringify(log.monitorChecks||{}));
+  monitorChecks   = JSON.parse(JSON.stringify(log.monitorChecks||{}));
   consoleSelected = log.consoleSelected||'';
   speakerSelected = log.speakerSelected||'';
-  announcerHas = log.announcerHas ?? null;
-  bannerHas = log.bannerHas ?? null;
-  trussHas = log.trussHas ?? null;
-  stairHas = log.stairHas ?? null;
+  weatherSelected = Array.isArray(log.weather) ? [...log.weather] : (log.weather ? [log.weather] : []);
+  announcerHas    = log.announcerHas ?? null;
+  bannerHas       = log.bannerHas   ?? null;
+  trussHas        = log.trussHas    ?? null;
+  stairHas        = log.stairHas    ?? null;
   fillForm(log);
   showForm();
 }
 
 // ── 폼 채우기 ──
 function fillForm(log) {
-  document.getElementById('f_date').value = log.date||today();
-  document.getElementById('f_weather').value = log.weather||'';
-  document.getElementById('f_eventType').value = log.eventType||'콘서트';
-  document.getElementById('f_eventName').value = log.eventName||'';
-  document.getElementById('f_clientManager').value = log.clientManager||'';
-  document.getElementById('f_venue').value = log.venue||'';
-  document.getElementById('f_engineer').value = log.engineer||'';
-  document.getElementById('f_stagedirector').value = log.stagedirector||'';
-  document.getElementById('f_staff1').value = log.staff1||'';
-  document.getElementById('f_staff2').value = log.staff2||'';
-  document.getElementById('f_callTimeSound').value = log.callTimeSound||'';
-  document.getElementById('f_callTimeStage').value = log.callTimeStage||'';
-  document.getElementById('f_showTime').value = log.showTime||'';
-  document.getElementById('f_endTime').value = log.endTime||'';
-  document.getElementById('f_teardownEnd').value = log.teardownEnd||'';
-  document.getElementById('f_preIssues').value = log.preIssues||'';
-  document.getElementById('f_duringIssues').value = log.duringIssues||'';
-  document.getElementById('f_resolution').value = log.resolution||'';
-  document.getElementById('f_clientFeedback').value = log.clientFeedback||'';
-  document.getElementById('f_memo').value = log.memo||'';
-  document.getElementById('f_announcerName').value = log.announcerName||'';
-  document.getElementById('f_announcerTel').value = log.announcerTel||'';
-  document.getElementById('f_stageW').value = log.stageW||'';
-  document.getElementById('f_stageD').value = log.stageD||'';
-  document.getElementById('f_bannerW').value = log.bannerW||'';
-  document.getElementById('f_bannerH').value = log.bannerH||'';
-  document.getElementById('f_trussW').value = log.trussW||'';
-  document.getElementById('f_trussH').value = log.trussH||'';
-  document.getElementById('f_speakerCustom').value = log.speakerCustom||'';
+  document.getElementById('f_date').value            = log.date||today();
+  document.getElementById('f_eventType').value       = log.eventType||'콘서트';
+  document.getElementById('f_eventName').value       = log.eventName||'';
+  document.getElementById('f_clientManager').value   = log.clientManager||'';
+  document.getElementById('f_venue').value           = log.venue||'';
+  document.getElementById('f_engineer').value        = log.engineer||'';
+  document.getElementById('f_stagedirector').value   = log.stagedirector||'';
+  document.getElementById('f_staff1').value          = log.staff1||'';
+  document.getElementById('f_staff2').value          = log.staff2||'';
+  document.getElementById('f_callTimeSound').value   = log.callTimeSound||'';
+  document.getElementById('f_callTimeStage').value   = log.callTimeStage||'';
+  document.getElementById('f_showTime').value        = log.showTime||'';
+  document.getElementById('f_endTime').value         = log.endTime||'';
+  document.getElementById('f_teardownEnd').value     = log.teardownEnd||'';
+  document.getElementById('f_preIssues').value       = log.preIssues||'';
+  document.getElementById('f_duringIssues').value    = log.duringIssues||'';
+  document.getElementById('f_resolution').value      = log.resolution||'';
+  document.getElementById('f_clientFeedback').value  = log.clientFeedback||'';
+  document.getElementById('f_memo').value            = log.memo||'';
+  document.getElementById('f_announcerName').value   = log.announcerName||'';
+  document.getElementById('f_announcerTel').value    = log.announcerTel||'';
+  document.getElementById('f_stageW').value          = log.stageW||'';
+  document.getElementById('f_stageD').value          = log.stageD||'';
+  document.getElementById('f_bannerW').value         = log.bannerW||'';
+  document.getElementById('f_bannerH').value         = log.bannerH||'';
+  document.getElementById('f_trussW').value          = log.trussW||'';
+  document.getElementById('f_trussH').value          = log.trussH||'';
+  document.getElementById('f_speakerCustom').value   = log.speakerCustom||'';
 
+  refreshWeatherUI();
   refreshAnnouncerUI();
   refreshBannerUI();
   refreshTrussUI();
@@ -880,16 +1071,26 @@ function updateTitle() {
   const date = document.getElementById('f_date').value;
   document.getElementById('formTopTitle').textContent = name || fmtDate(date) || '새 작업일지';
 }
-
 function toggleSection(id) { document.getElementById(id).classList.toggle('collapsed'); }
+
+// ── 날씨 복수 선택 ──
+function toggleWeather(el) {
+  const val = el.dataset.val;
+  const idx = weatherSelected.indexOf(val);
+  if (idx === -1) { weatherSelected.push(val); el.classList.add('selected'); }
+  else { weatherSelected.splice(idx, 1); el.classList.remove('selected'); }
+}
+function refreshWeatherUI() {
+  document.querySelectorAll('.weather-opt').forEach(el => {
+    el.classList.toggle('selected', weatherSelected.includes(el.dataset.val));
+  });
+}
 
 // ── 아나운서 ──
 function toggleAnnouncer(val) { announcerHas = val; refreshAnnouncerUI(); }
 function refreshAnnouncerUI() {
-  const yes = document.getElementById('ann_yes');
-  const no  = document.getElementById('ann_no');
-  yes.className = 'toggle-opt' + (announcerHas === true ? ' selected-yes' : '');
-  no.className  = 'toggle-opt' + (announcerHas === false ? ' selected-no'  : '');
+  document.getElementById('ann_yes').className = 'toggle-opt' + (announcerHas === true ? ' selected-yes' : '');
+  document.getElementById('ann_no').className  = 'toggle-opt' + (announcerHas === false ? ' selected-no'  : '');
   document.getElementById('ann_yes_check').textContent = announcerHas === true  ? '✓' : '';
   document.getElementById('ann_no_check').textContent  = announcerHas === false ? '✓' : '';
   document.getElementById('announcerForm').style.display = announcerHas === true ? 'flex' : 'none';
@@ -902,7 +1103,7 @@ function refreshBannerUI() {
   document.getElementById('banner_no').className  = 'toggle-opt' + (bannerHas === false ? ' selected-no'  : '');
   document.getElementById('banner_yes_check').textContent = bannerHas === true  ? '✓' : '';
   document.getElementById('banner_no_check').textContent  = bannerHas === false ? '✓' : '';
-  document.getElementById('bannerDimForm').style.display = bannerHas === true ? 'block' : 'none';
+  document.getElementById('bannerDimForm').style.display  = bannerHas === true ? 'block' : 'none';
 }
 
 // ── 트러스 ──
@@ -912,7 +1113,7 @@ function refreshTrussUI() {
   document.getElementById('truss_no').className  = 'toggle-opt' + (trussHas === false ? ' selected-no'  : '');
   document.getElementById('truss_yes_check').textContent = trussHas === true  ? '✓' : '';
   document.getElementById('truss_no_check').textContent  = trussHas === false ? '✓' : '';
-  document.getElementById('trussDimForm').style.display = trussHas === true ? 'block' : 'none';
+  document.getElementById('trussDimForm').style.display  = trussHas === true ? 'block' : 'none';
 }
 
 // ── 계단 ──
@@ -922,7 +1123,7 @@ function refreshStairUI(savedPos) {
   document.getElementById('stair_no').className  = 'toggle-opt' + (stairHas === false ? ' selected-no'  : '');
   document.getElementById('stair_yes_check').textContent = stairHas === true  ? '✓' : '';
   document.getElementById('stair_no_check').textContent  = stairHas === false ? '✓' : '';
-  document.getElementById('stairPosForm').style.display = stairHas === true ? 'block' : 'none';
+  document.getElementById('stairPosForm').style.display  = stairHas === true ? 'block' : 'none';
   if (savedPos) {
     document.querySelectorAll('#stairGrid .stair-item').forEach(el => {
       const checked = savedPos.includes(el.dataset.pos);
@@ -936,15 +1137,12 @@ function toggleStairPos(el) {
   el.querySelector('.stair-check').textContent = el.classList.contains('checked') ? '✓' : '';
 }
 
-// ── 콘솔 선택 ──
+// ── 콘솔/스피커 선택 ──
 function selectEquipOpt(el, type) {
-  const grid = el.closest('.equip-option-grid');
-  grid.querySelectorAll('.equip-opt').forEach(o => {
-    o.classList.remove('selected');
-    o.querySelector('.equip-opt-dot').textContent = '';
+  el.closest('.equip-option-grid').querySelectorAll('.equip-opt').forEach(o => {
+    o.classList.remove('selected'); o.querySelector('.equip-opt-dot').textContent = '';
   });
-  el.classList.add('selected');
-  el.querySelector('.equip-opt-dot').textContent = '●';
+  el.classList.add('selected'); el.querySelector('.equip-opt-dot').textContent = '●';
   if (type === 'console') {
     consoleSelected = el.dataset.val;
   } else {
@@ -968,7 +1166,7 @@ function refreshSpeakerUI() {
   document.getElementById('speakerCustomWrap').style.display = speakerSelected === 'custom' ? 'block' : 'none';
 }
 
-// ── 모니터 스피커 세팅 체크리스트 ──
+// ── 모니터 스피커 체크리스트 ──
 function renderMonitorChecklist() {
   const list = document.getElementById('monitorCheckList');
   list.innerHTML = '';
@@ -994,7 +1192,6 @@ function renderMonitorChecklist() {
     list.appendChild(div);
   });
 }
-
 function toggleMonitorCheck(key, rowEl) {
   const item = rowEl.closest('.monitor-check-item');
   const isChecked = item.classList.toggle('checked');
@@ -1052,32 +1249,30 @@ function getFormData() {
   const log = logs.find(l => l.id === currentId);
   if (!log) return null;
 
-  const fields = ['date','weather','eventType','eventName','clientManager','venue','engineer','stagedirector','staff1','staff2',
+  const fields = ['date','eventType','eventName','clientManager','venue','engineer','stagedirector','staff1','staff2',
     'callTimeSound','callTimeStage','showTime','endTime','teardownEnd',
     'preIssues','duringIssues','resolution','clientFeedback','memo',
     'announcerName','announcerTel',
-    'stageW','stageD',
-    'bannerW','bannerH','trussW','trussH','speakerCustom'];
+    'stageW','stageD','bannerW','bannerH','trussW','trussH','speakerCustom'];
   fields.forEach(f => { log[f] = document.getElementById('f_'+f)?.value||''; });
 
-  log.announcerHas = announcerHas;
-  log.bannerHas = bannerHas;
-  log.trussHas = trussHas;
-  log.stairHas = stairHas;
-  log.stairPos = [];
+  log.weather         = [...weatherSelected];
+  log.announcerHas    = announcerHas;
+  log.bannerHas       = bannerHas;
+  log.trussHas        = trussHas;
+  log.stairHas        = stairHas;
+  log.stairPos        = [];
   document.querySelectorAll('#stairGrid .stair-item.checked').forEach(el => log.stairPos.push(el.dataset.pos));
-
   log.consoleSelected = consoleSelected;
   log.speakerSelected = speakerSelected;
 
-  // 모니터 체크: textarea 값 수집
   log.monitorChecks = {};
   document.querySelectorAll('.monitor-check-item').forEach((el, i) => {
-    const key = MONITOR_ITEMS[i].key;
+    const key     = MONITOR_ITEMS[i].key;
     const checked = el.classList.contains('checked');
-    const memo = el.querySelector('textarea')?.value || '';
+    const memo    = el.querySelector('textarea')?.value || '';
     log.monitorChecks[key] = { checked, memo };
-    monitorChecks[key] = { checked, memo };
+    monitorChecks[key]     = { checked, memo };
   });
 
   log.rehearsals = [];
@@ -1115,31 +1310,24 @@ function generateMD(log) {
     return `- [${s.checked?'x':' '}] ${item.label}${s.memo ? `\n  > ${s.memo}` : ''}`;
   }).join('\n');
 
-  const eq = (log.equipment||[]).map(e => `| ${e.item} | ${e.qty} | ${e.serial} | ${e.note} |`).join('\n');
-  const rh = (log.rehearsals||[]).map(r => `| ${r.team} | ${r.start} | ${r.end} |`).join('\n');
+  const eq  = (log.equipment||[]).map(e => `| ${e.item} | ${e.qty} | ${e.serial} | ${e.note} |`).join('\n');
+  const rh  = (log.rehearsals||[]).map(r => `| ${r.team} | ${r.start} | ${r.end} |`).join('\n');
   const stairPosLabel = {'left':'좌','right':'우','front-left':'앞좌','front-right':'앞우','rear':'후면'};
-  const stairPosStr = (log.stairPos||[]).map(p => stairPosLabel[p]||p).join(', ') || '-';
+  const stairPosStr   = (log.stairPos||[]).map(p => stairPosLabel[p]||p).join(', ') || '-';
+  const spkDisplay    = log.speakerSelected === 'custom' ? (log.speakerCustom||'직접입력') : (log.speakerSelected||'-');
+  const weatherStr    = Array.isArray(log.weather) ? log.weather.join(', ') : (log.weather||'-');
 
-  const spkDisplay = log.speakerSelected === 'custom' ? (log.speakerCustom||'직접입력') : (log.speakerSelected||'-');
-
-  return `# 음향 작업일지\n\n## 기본 정보\n- **날짜**: ${log.date}\n- **날씨**: ${log.weather||'-'}\n- **행사명**: ${log.eventName}\n- **고객사 담당자**: ${log.clientManager}\n- **장소**: ${log.venue}\n- **유형**: ${log.eventType}\n\n## 인력\n- **음향 엔지니어**: ${log.engineer}\n- **무대 감독**: ${log.stagedirector}\n- **스태프 1**: ${log.staff1}\n- **스태프 2**: ${log.staff2}\n- **아나운서**: ${log.announcerHas ? `있음 (${log.announcerName} / ${log.announcerTel})` : '없음'}\n\n## 타임라인\n| 구분 | 시간 |\n|------|------|\n| 음향설치시작 | ${log.callTimeSound} |\n| 무대설치시작 | ${log.callTimeStage} |\n| 행사시작 | ${log.showTime} |\n| 행사종료 | ${log.endTime} |\n| 철수완료 | ${log.teardownEnd} |\n\n## 리허설 일정\n| 팀/아티스트 | 시작 | 종료 |\n|------------|------|------|\n${rh||'| - | - | - |'}\n\n## 설치 체크리스트\n- **콘솔**: ${log.consoleSelected||'-'}\n- **스피커**: ${spkDisplay}\n\n## 모니터 스피커 세팅\n${monitorMD}\n\n## 투입 장비\n| 장비명 | 수량 | S/N | 비고 |\n|--------|------|-----|------|\n${eq||'| - | - | - | - |'}\n\n## 무대 설치\n- **무대 크기**: 가로 ${log.stageW||'-'}m × 세로 ${log.stageD||'-'}m\n- **플랭카드**: ${log.bannerHas ? `있음 (가로 ${log.bannerW}m × 세로 ${log.bannerH}m)` : '없음'}\n- **트러스**: ${log.trussHas ? `있음 (가로 ${log.trussW}m × 세로 ${log.trussH}m)` : '없음'}\n- **계단**: ${log.stairHas ? `있음 (위치: ${stairPosStr})` : '없음'}\n\n## 이슈 & 해결\n### 사전 이슈\n${log.preIssues||'없음'}\n\n### 진행 중 이슈\n${log.duringIssues||'없음'}\n\n### 해결 내용\n${log.resolution||'없음'}\n\n## 고객 피드백\n${log.clientFeedback||'없음'}\n\n## 메모\n${log.memo||'없음'}\n\n---\n*작성: ${new Date(log.createdAt||Date.now()).toLocaleString('ko-KR')}*\n`;
+  return `# 음향 작업일지\n\n## 기본 정보\n- **날짜**: ${log.date}\n- **날씨**: ${weatherStr}\n- **행사명**: ${log.eventName}\n- **고객사 담당자**: ${log.clientManager}\n- **장소**: ${log.venue}\n- **유형**: ${log.eventType}\n\n## 인력\n- **음향 엔지니어**: ${log.engineer}\n- **무대 감독**: ${log.stagedirector}\n- **스태프 1**: ${log.staff1}\n- **스태프 2**: ${log.staff2}\n- **아나운서**: ${log.announcerHas ? `있음 (${log.announcerName} / ${log.announcerTel})` : '없음'}\n\n## 타임라인\n| 구분 | 시간 |\n|------|------|\n| 음향설치시작 | ${log.callTimeSound} |\n| 무대설치시작 | ${log.callTimeStage} |\n| 행사시작 | ${log.showTime} |\n| 행사종료 | ${log.endTime} |\n| 철수완료 | ${log.teardownEnd} |\n\n## 리허설 일정\n| 팀/아티스트 | 시작 | 종료 |\n|------------|------|------|\n${rh||'| - | - | - |'}\n\n## 설치 체크리스트\n- **콘솔**: ${log.consoleSelected||'-'}\n- **스피커**: ${spkDisplay}\n\n## 모니터 스피커 세팅\n${monitorMD}\n\n## 투입 장비\n| 장비명 | 수량 | S/N | 비고 |\n|--------|------|-----|------|\n${eq||'| - | - | - | - |'}\n\n## 무대 설치\n- **무대 크기**: 가로 ${log.stageW||'-'}m × 세로 ${log.stageD||'-'}m\n- **플랭카드**: ${log.bannerHas ? `있음 (가로 ${log.bannerW}m × 세로 ${log.bannerH}m)` : '없음'}\n- **트러스**: ${log.trussHas ? `있음 (가로 ${log.trussW}m × 세로 ${log.trussH}m)` : '없음'}\n- **계단**: ${log.stairHas ? `있음 (위치: ${stairPosStr})` : '없음'}\n\n## 이슈 & 해결\n### 사전 이슈\n${log.preIssues||'없음'}\n\n### 진행 중 이슈\n${log.duringIssues||'없음'}\n\n### 해결 내용\n${log.resolution||'없음'}\n\n## 고객 피드백\n${log.clientFeedback||'없음'}\n\n## 메모\n${log.memo||'없음'}\n\n---\n*저장: ${new Date().toLocaleString('ko-KR')}*\n`;
 }
 
 function toggleMDPreview() {
   const log = getFormData();
   if (!log) return;
   const el = document.getElementById('mdPreview');
-  if (el.style.display==='block') { el.style.display='none'; }
-  else { el.textContent = generateMD(log); el.style.display='block'; el.scrollIntoView({behavior:'smooth',block:'start'}); }
+  if (el.style.display === 'block') { el.style.display = 'none'; }
+  else { el.textContent = generateMD(log); el.style.display = 'block'; el.scrollIntoView({behavior:'smooth',block:'start'}); }
 }
-function exportMD() {
-  const log = getFormData();
-  if (!log) return;
-  const blob = new Blob([generateMD(log)], {type:'text/markdown'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `${log.date}_${(log.eventName||'작업일지').replace(/\s/g,'_')}.md`; a.click();
-  showToast('💾 MD 저장 완료');
-}
+
 function exportAllMD() {
   if (!logs.length) { showToast('저장된 일지 없음'); return; }
   const blob = new Blob([logs.map(generateMD).join('\n\n---\n\n')], {type:'text/markdown'});
@@ -1147,11 +1335,17 @@ function exportAllMD() {
   a.download = `soundlog_all_${today()}.md`; a.click();
   showToast('📄 전체 내보내기 완료');
 }
+
 function showToast(msg) {
   const el = document.getElementById('toast'); el.textContent = msg;
-  el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2000);
+  el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2200);
 }
 
+// ── 초기화 ──
+// 기존 데이터에서 page 초기 표시
+document.getElementById('pageList').style.display = 'flex';
+document.getElementById('pageMdStore').style.display = 'none';
+document.getElementById('pageForm').style.display = 'none';
 renderList();
 </script>
 </body>
