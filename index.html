@@ -466,26 +466,16 @@ select option { background: #181c24; }
 
   <!-- NAV TABS -->
   <div class="nav-tabs">
-    <div class="nav-tab active" id="tab-list" onclick="switchTab('list')">📋 작업일지</div>
-    <div class="nav-tab" id="tab-mdstore" onclick="switchTab('mdstore')">📂 MD 저장소</div>
+    <div class="nav-tab active" id="tab-list">📋 작업일지</div>
   </div>
 
   <!-- LIST PAGE -->
   <div class="page active" id="pageList">
     <div class="list-toolbar">
       <button class="btn btn-new" onclick="newLog()">＋ 새 작업일지</button>
-      <button class="btn btn-secondary" onclick="exportAllMD()">📄 전체MD</button>
+      <button class="btn btn-secondary" onclick="gistLoad()" style="background:var(--gold-dim);color:var(--gold);border-color:rgba(201,168,76,0.35)">☁️ 불러오기</button>
     </div>
     <div class="log-cards" id="logCards"></div>
-  </div>
-
-  <!-- MD STORAGE PAGE -->
-  <div class="page" id="pageMdStore">
-    <div class="md-storage-toolbar">
-      <span class="md-storage-title" id="mdStoreCount">저장된 MD 없음</span>
-      <button class="btn btn-secondary" onclick="clearAllMdStore()" style="font-size:12px;padding:8px 12px;">전체 삭제</button>
-    </div>
-    <div class="md-file-cards" id="mdFileCards"></div>
   </div>
 
   <!-- FORM PAGE -->
@@ -493,7 +483,7 @@ select option { background: #181c24; }
     <div class="form-top-bar">
       <button class="back-btn" onclick="showList()">‹</button>
       <div class="form-top-title" id="formTopTitle">새 작업일지</div>
-      <button class="save-btn-top" onclick="saveLog()">저장</button>
+      <button class="save-btn-top" onclick="saveAndSync()">저장</button>
     </div>
 
     <div class="form-scroll">
@@ -509,7 +499,7 @@ select option { background: #181c24; }
             <!-- 날짜 + 날씨 복수선택 -->
             <div class="field" style="margin-bottom:13px">
               <label>날짜</label>
-              <input id="f_date" type="date" oninput="updateTitle()">
+              <input id="f_date" type="date" oninput="updateTitle()" style="color-scheme:dark;">
             </div>
             <div class="field" style="margin-bottom:13px">
               <label>날씨 (복수 선택 가능)</label>
@@ -611,23 +601,38 @@ select option { background: #181c24; }
           </div>
           <div class="section-content">
             <div class="equip-select-block">
-              <div class="equip-select-label">🎛️ 콘솔</div>
-              <div class="equip-option-grid" id="consoleGrid">
-                <div class="equip-opt" data-val="Midas" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Midas</div>
-                <div class="equip-opt" data-val="Allen &amp; Heath" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Allen &amp; Heath</div>
-                <div class="equip-opt" data-val="Wing" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Wing</div>
-                <div class="equip-opt" data-val="Yamaha" onclick="selectEquipOpt(this,'console')"><div class="equip-opt-dot"></div>Yamaha</div>
+              <div class="equip-select-label">🎛️ 콘솔 브랜드 선택</div>
+              <div class="equip-option-grid" id="consoleBrandGrid" style="grid-template-columns:repeat(2,1fr)">
+                <div class="equip-opt" data-val="Midas" onclick="selectConsoleBrand(this)"><div class="equip-opt-dot"></div>Midas</div>
+                <div class="equip-opt" data-val="Behringer" onclick="selectConsoleBrand(this)"><div class="equip-opt-dot"></div>Behringer</div>
+                <div class="equip-opt" data-val="Allen &amp; Heath" onclick="selectConsoleBrand(this)"><div class="equip-opt-dot"></div>Allen &amp; Heath</div>
+                <div class="equip-opt" data-val="Yamaha" onclick="selectConsoleBrand(this)"><div class="equip-opt-dot"></div>Yamaha</div>
+              </div>
+              <!-- 모델 선택 -->
+              <div id="consoleModelWrap" style="display:none;margin-top:10px">
+                <div class="equip-select-label" style="margin-bottom:8px">모델 선택</div>
+                <div class="equip-option-grid" id="consoleModelGrid" style="grid-template-columns:repeat(2,1fr)"></div>
+                <div id="consoleCustomWrap" style="display:none;margin-top:8px">
+                  <input id="f_consoleCustom" type="text" placeholder="모델명 직접 입력">
+                </div>
               </div>
             </div>
             <div class="equip-select-block">
-              <div class="equip-select-label">🔊 스피커</div>
-              <div class="equip-option-grid" id="speakerGrid">
-                <div class="equip-opt" data-val="d&amp;b" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>d&amp;b</div>
-                <div class="equip-opt" data-val="JBL" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>JBL</div>
-                <div class="equip-opt" data-val="custom" onclick="selectEquipOpt(this,'speaker')"><div class="equip-opt-dot"></div>직접입력</div>
+              <div class="equip-select-label">🔊 스피커 브랜드 선택</div>
+              <div class="equip-option-grid" id="speakerBrandGrid" style="grid-template-columns:repeat(2,1fr)">
+                <div class="equip-opt" data-val="d&b" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>d&amp;b audiotechnik</div>
+                <div class="equip-opt" data-val="JBL" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>JBL</div>
+                <div class="equip-opt" data-val="L-Acoustics" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>L-Acoustics</div>
+                <div class="equip-opt" data-val="Meyer Sound" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>Meyer Sound</div>
+                <div class="equip-opt" data-val="Nexo" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>Nexo</div>
+                <div class="equip-opt" data-val="QSC" onclick="selectSpeakerBrand(this)"><div class="equip-opt-dot"></div>QSC</div>
               </div>
-              <div class="equip-custom-input" id="speakerCustomWrap" style="display:none">
-                <input id="f_speakerCustom" type="text" placeholder="스피커 브랜드/모델 직접 입력">
+              <div id="speakerModelWrap" style="display:none;margin-top:10px">
+                <div class="equip-select-label" style="margin-bottom:8px">모델 선택</div>
+                <div class="equip-option-grid" id="speakerModelGrid" style="grid-template-columns:repeat(2,1fr)"></div>
+                <div id="speakerCustomWrap" style="display:none;margin-top:8px">
+                  <input id="f_speakerCustom" type="text" placeholder="모델명 직접 입력">
+                </div>
               </div>
             </div>
           </div>
@@ -746,24 +751,33 @@ select option { background: #181c24; }
     </div>
 
     <div class="bottom-actions">
-      <button class="btn btn-secondary" onclick="toggleMDPreview()">MD</button>
-      <button class="btn btn-secondary" onclick="saveMDToStore()">💾 MD저장</button>
+      <button class="btn btn-secondary" onclick="exportCurrentMD()">⬇ MD다운</button>
       <button class="btn btn-danger" onclick="deleteLog()">삭제</button>
-      <button class="btn btn-primary" onclick="saveLog()">✓ 저장</button>
+      <button class="btn btn-primary" onclick="saveAndSync()">✓ 저장</button>
     </div>
   </div>
 </div>
 
-<!-- 덮어쓰기 확인 모달 -->
-<div class="modal-overlay" id="overwriteModal">
+
+
+<!-- 날짜 범위 선택 모달 -->
+<div class="modal-overlay" id="dateRangeModal">
   <div class="modal-sheet">
-    <div class="modal-title">📄 이미 저장된 MD가 있습니다</div>
-    <div class="modal-desc">동일한 이름의 MD 파일이 저장소에 있습니다.<br>덮어쓰기하거나 새 버전으로 저장할 수 있습니다.</div>
-    <div class="modal-filename" id="modalFilename"></div>
+    <div class="modal-title">📅 불러올 기간 선택</div>
+    <div class="modal-desc" style="margin-bottom:14px">클라우드에서 가져올 날짜 범위를 선택하세요.</div>
+    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:18px">
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px">시작 날짜</label>
+        <input type="date" id="drFrom" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:15px;padding:12px 13px;outline:none;color-scheme:dark;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px">종료 날짜</label>
+        <input type="date" id="drTo" style="width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-size:15px;padding:12px 13px;outline:none;color-scheme:dark;">
+      </div>
+    </div>
     <div class="modal-actions">
-      <button class="modal-btn modal-btn-cancel" onclick="closeModal()">취소</button>
-      <button class="modal-btn modal-btn-overwrite" onclick="doMDSave('overwrite')">덮어쓰기</button>
-      <button class="modal-btn modal-btn-new" onclick="doMDSave('new')">새 버전</button>
+      <button class="modal-btn modal-btn-cancel" onclick="closeDateModal()">취소</button>
+      <button class="modal-btn modal-btn-new" onclick="doDateLoad()">☁️ 불러오기</button>
     </div>
   </div>
 </div>
@@ -850,13 +864,16 @@ function renderList() {
     return;
   }
   el.innerHTML = [...logs].reverse().map(l => `
-    <div class="log-card" onclick="editLog('${l.id}')">
-      <div class="log-card-top">
+    <div class="log-card">
+      <div class="log-card-top" onclick="editLog('${l.id}')">
         <span class="log-card-date">${fmtDate(l.date)}</span>
         <span class="log-card-type">${l.eventType||'기타'}</span>
       </div>
-      <div class="log-card-name">${l.eventName||'(행사명 없음)'}</div>
-      <div class="log-card-venue">${l.venue||''}</div>
+      <div class="log-card-name" onclick="editLog('${l.id}')">${l.eventName||'(행사명 없음)'}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+        <div class="log-card-venue" onclick="editLog('${l.id}')">${l.venue||''}</div>
+        <button onclick="deleteLogById('${l.id}')" style="background:var(--accent2-dim);color:var(--accent2);border:1px solid rgba(224,123,84,0.3);border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;">삭제</button>
+      </div>
     </div>
   `).join('');
 }
@@ -1011,7 +1028,16 @@ function editLog(id) {
   const log = logs.find(l => l.id === id);
   monitorChecks   = JSON.parse(JSON.stringify(log.monitorChecks||{}));
   consoleSelected = log.consoleSelected||'';
+  // consoleBrand 복원 (브랜드명이 consoleSelected 앞에 있음)
+  consoleBrand = '';
+  for (const brand of Object.keys(typeof CONSOLE_MODELS !== 'undefined' ? CONSOLE_MODELS : {})) {
+    if (consoleSelected.startsWith(brand)) { consoleBrand = brand; break; }
+  }
   speakerSelected = log.speakerSelected||'';
+  speakerBrand = '';
+  for (const brand of Object.keys(typeof SPEAKER_MODELS !== 'undefined' ? SPEAKER_MODELS : {})) {
+    if (speakerSelected.startsWith(brand)) { speakerBrand = brand; break; }
+  }
   weatherSelected = Array.isArray(log.weather) ? [...log.weather] : (log.weather ? [log.weather] : []);
   announcerHas    = log.announcerHas ?? null;
   bannerHas       = log.bannerHas   ?? null;
@@ -1138,32 +1164,137 @@ function toggleStairPos(el) {
 }
 
 // ── 콘솔/스피커 선택 ──
-function selectEquipOpt(el, type) {
-  el.closest('.equip-option-grid').querySelectorAll('.equip-opt').forEach(o => {
+// 브랜드별 모델 목록
+const CONSOLE_MODELS = {
+  'Midas': ['PRO1','PRO2','PRO2C','PRO3','PRO6','PRO9','M32','M32R','M32C','HD96','HD96-AIR','직접입력'],
+  'Behringer': ['X32','X32 COMPACT','X32 RACK','X32 PRODUCER','WING','WING COMPACT','WING RACK','직접입력'],
+  'Allen & Heath': ['SQ-5','SQ-6','SQ-7','Avantis','Avantis Solo','dLive C1500','dLive C2500','dLive S3000','dLive S5000','dLive S7000','직접입력'],
+  'Yamaha': ['QL1','QL5','CL3','CL5','DM7','DM7 Compact','RIVAGE PM3','RIVAGE PM5','RIVAGE PM7','RIVAGE PM10','직접입력']
+};
+
+let consoleBrand = '';
+let consoleModel = '';
+
+function selectConsoleBrand(el) {
+  document.querySelectorAll('#consoleBrandGrid .equip-opt').forEach(o => {
     o.classList.remove('selected'); o.querySelector('.equip-opt-dot').textContent = '';
   });
   el.classList.add('selected'); el.querySelector('.equip-opt-dot').textContent = '●';
-  if (type === 'console') {
-    consoleSelected = el.dataset.val;
+  consoleBrand = el.dataset.val;
+  consoleModel = '';
+  consoleSelected = consoleBrand;
+  // 모델 목록 렌더
+  const models = CONSOLE_MODELS[consoleBrand] || [];
+  const grid = document.getElementById('consoleModelGrid');
+  grid.innerHTML = models.map(m =>
+    `<div class="equip-opt" data-val="${m}" onclick="selectConsoleModel(this)"><div class="equip-opt-dot"></div>${m}</div>`
+  ).join('');
+  document.getElementById('consoleModelWrap').style.display = 'block';
+  document.getElementById('consoleCustomWrap').style.display = 'none';
+}
+
+function selectConsoleModel(el) {
+  document.querySelectorAll('#consoleModelGrid .equip-opt').forEach(o => {
+    o.classList.remove('selected'); o.querySelector('.equip-opt-dot').textContent = '';
+  });
+  el.classList.add('selected'); el.querySelector('.equip-opt-dot').textContent = '●';
+  consoleModel = el.dataset.val;
+  if (consoleModel === '직접입력') {
+    document.getElementById('consoleCustomWrap').style.display = 'block';
+    consoleSelected = consoleBrand;
   } else {
-    speakerSelected = el.dataset.val;
-    document.getElementById('speakerCustomWrap').style.display = speakerSelected === 'custom' ? 'block' : 'none';
+    document.getElementById('consoleCustomWrap').style.display = 'none';
+    consoleSelected = consoleBrand + ' ' + consoleModel;
   }
 }
-function refreshConsoleUI() {
-  document.querySelectorAll('#consoleGrid .equip-opt').forEach(o => {
-    const sel = o.dataset.val === consoleSelected;
-    o.classList.toggle('selected', sel);
-    o.querySelector('.equip-opt-dot').textContent = sel ? '●' : '';
+
+// 브랜드별 스피커 모델 목록
+const SPEAKER_MODELS = {
+  'd&b': ['V-Series (V8/V12)','Y-Series (Y8/Y12)','J-Series (J8/J12)','SL-Series (SL-GSub)','KSL-Series','xS-Series','T-Series','E-Series','직접입력'],
+  'JBL': ['VTX A8','VTX A12','VTX V20','SRX906LA','SRX912LA','SRX918S','SRX828SP','VRX932LA','PRX835W','직접입력'],
+  'L-Acoustics': ['K1','K2','K3','Kara II','Kara','Syva','X15 HiQ','X12','직접입력'],
+  'Meyer Sound': ['LEOPARD','LYON','PANTHER','MILO','ULTRA-X40','UPA-1P','1100-LFC','직접입력'],
+  'Nexo': ['GEO M10','GEO M6','STM M28','PS15 R2','ID24','직접입력'],
+  'QSC': ['KS212C','KS118','K12.2','KW153','TouchMix','직접입력']
+};
+
+let speakerBrand = '';
+let speakerModel = '';
+
+function selectSpeakerBrand(el) {
+  document.querySelectorAll('#speakerBrandGrid .equip-opt').forEach(o => {
+    o.classList.remove('selected'); o.querySelector('.equip-opt-dot').textContent = '';
   });
+  el.classList.add('selected'); el.querySelector('.equip-opt-dot').textContent = '●';
+  speakerBrand = el.dataset.val;
+  speakerModel = '';
+  speakerSelected = speakerBrand;
+  const models = SPEAKER_MODELS[speakerBrand] || [];
+  const grid = document.getElementById('speakerModelGrid');
+  grid.innerHTML = models.map(m =>
+    `<div class="equip-opt" data-val="${m}" onclick="selectSpeakerModel(this)"><div class="equip-opt-dot"></div>${m}</div>`
+  ).join('');
+  document.getElementById('speakerModelWrap').style.display = 'block';
+  document.getElementById('speakerCustomWrap').style.display = 'none';
+}
+
+function selectSpeakerModel(el) {
+  document.querySelectorAll('#speakerModelGrid .equip-opt').forEach(o => {
+    o.classList.remove('selected'); o.querySelector('.equip-opt-dot').textContent = '';
+  });
+  el.classList.add('selected'); el.querySelector('.equip-opt-dot').textContent = '●';
+  speakerModel = el.dataset.val;
+  if (speakerModel === '직접입력') {
+    document.getElementById('speakerCustomWrap').style.display = 'block';
+    speakerSelected = speakerBrand;
+  } else {
+    document.getElementById('speakerCustomWrap').style.display = 'none';
+    speakerSelected = speakerBrand + ' ' + speakerModel;
+  }
+}
+
+function refreshConsoleUI() {
+  // 브랜드 선택 복원
+  document.querySelectorAll('#consoleBrandGrid .equip-opt').forEach(o => {
+    const isBrand = consoleBrand && consoleSelected && consoleSelected.startsWith(o.dataset.val);
+    o.classList.toggle('selected', isBrand);
+    o.querySelector('.equip-opt-dot').textContent = isBrand ? '●' : '';
+  });
+  if (consoleBrand && CONSOLE_MODELS[consoleBrand]) {
+    const models = CONSOLE_MODELS[consoleBrand];
+    const grid = document.getElementById('consoleModelGrid');
+    grid.innerHTML = models.map(m =>
+      `<div class="equip-opt" data-val="${m}" onclick="selectConsoleModel(this)"><div class="equip-opt-dot"></div>${m}</div>`
+    ).join('');
+    document.getElementById('consoleModelWrap').style.display = 'block';
+    // 모델 선택 복원
+    grid.querySelectorAll('.equip-opt').forEach(o => {
+      const modelPart = consoleSelected ? consoleSelected.replace(consoleBrand + ' ', '') : '';
+      const sel = o.dataset.val === modelPart;
+      o.classList.toggle('selected', sel);
+      o.querySelector('.equip-opt-dot').textContent = sel ? '●' : '';
+    });
+  }
 }
 function refreshSpeakerUI() {
-  document.querySelectorAll('#speakerGrid .equip-opt').forEach(o => {
-    const sel = o.dataset.val === speakerSelected;
-    o.classList.toggle('selected', sel);
-    o.querySelector('.equip-opt-dot').textContent = sel ? '●' : '';
+  document.querySelectorAll('#speakerBrandGrid .equip-opt').forEach(o => {
+    const isBrand = speakerBrand && speakerSelected && speakerSelected.startsWith(o.dataset.val);
+    o.classList.toggle('selected', isBrand);
+    o.querySelector('.equip-opt-dot').textContent = isBrand ? '●' : '';
   });
-  document.getElementById('speakerCustomWrap').style.display = speakerSelected === 'custom' ? 'block' : 'none';
+  if (speakerBrand && SPEAKER_MODELS[speakerBrand]) {
+    const grid = document.getElementById('speakerModelGrid');
+    grid.innerHTML = SPEAKER_MODELS[speakerBrand].map(m =>
+      `<div class="equip-opt" data-val="${m}" onclick="selectSpeakerModel(this)"><div class="equip-opt-dot"></div>${m}</div>`
+    ).join('');
+    document.getElementById('speakerModelWrap').style.display = 'block';
+    grid.querySelectorAll('.equip-opt').forEach(o => {
+      const modelPart = speakerSelected ? speakerSelected.replace(speakerBrand + ' ', '') : '';
+      const sel = o.dataset.val === modelPart;
+      o.classList.toggle('selected', sel);
+      o.querySelector('.equip-opt-dot').textContent = sel ? '●' : '';
+    });
+  }
 }
 
 // ── 모니터 스피커 체크리스트 ──
@@ -1253,7 +1384,7 @@ function getFormData() {
     'callTimeSound','callTimeStage','showTime','endTime','teardownEnd',
     'preIssues','duringIssues','resolution','clientFeedback','memo',
     'announcerName','announcerTel',
-    'stageW','stageD','bannerW','bannerH','trussW','trussH','speakerCustom'];
+    'stageW','stageD','bannerW','bannerH','trussW','trussH','speakerCustom','consoleCustom'];
   fields.forEach(f => { log[f] = document.getElementById('f_'+f)?.value||''; });
 
   log.weather         = [...weatherSelected];
@@ -1263,8 +1394,18 @@ function getFormData() {
   log.stairHas        = stairHas;
   log.stairPos        = [];
   document.querySelectorAll('#stairGrid .stair-item.checked').forEach(el => log.stairPos.push(el.dataset.pos));
-  log.consoleSelected = consoleSelected;
-  log.speakerSelected = speakerSelected;
+  if (consoleModel === '직접입력') {
+    const custom = document.getElementById('f_consoleCustom')?.value || '';
+    log.consoleSelected = consoleBrand + (custom ? ' ' + custom : '');
+  } else {
+    log.consoleSelected = consoleSelected;
+  }
+  if (speakerModel === '직접입력') {
+    const custom = document.getElementById('f_speakerCustom')?.value || '';
+    log.speakerSelected = speakerBrand + (custom ? ' ' + custom : '');
+  } else {
+    log.speakerSelected = speakerSelected;
+  }
 
   log.monitorChecks = {};
   document.querySelectorAll('.monitor-check-item').forEach((el, i) => {
@@ -1296,10 +1437,20 @@ function saveLog() {
   showToast('✓ 저장 완료');
 }
 function deleteLog() {
-  if (!confirm('이 일지를 삭제할까요?')) return;
+  const pw = prompt('삭제 비밀번호를 입력하세요:');
+  if (pw !== '2375') { showToast('❌ 비밀번호가 틀렸습니다'); return; }
   logs = logs.filter(l => l.id !== currentId);
   localStorage.setItem('soundlogs', JSON.stringify(logs));
   showList();
+}
+
+function deleteLogById(id) {
+  const pw = prompt('삭제 비밀번호를 입력하세요:');
+  if (pw !== '2375') { showToast('❌ 비밀번호가 틀렸습니다'); return; }
+  logs = logs.filter(l => l.id !== id);
+  localStorage.setItem('soundlogs', JSON.stringify(logs));
+  renderList();
+  showToast('삭제 완료');
 }
 
 // ── MD 생성 ──
@@ -1341,10 +1492,106 @@ function showToast(msg) {
   el.classList.add('show'); setTimeout(() => el.classList.remove('show'), 2200);
 }
 
+// ── Supabase 설정 ──
+const SB_URL = 'https://nifmnigvrjfctdimgmda.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pZm1uaWd2cmpmY3RkaW1nbWRhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY0MTUzMjksImV4cCI6MjA5MTk5MTMyOX0.XXxITbXcojeGnb-ZCT7zpibxmzn6bdQU6JQKtAanQjk';
+
+// 일지 하나를 Supabase에 저장 (개별 upsert)
+async function sbUpsertLog(log) {
+  const mdContent = generateMD(log);
+  const payload = {
+    id:         log.id,
+    date:       log.date,
+    event_name: log.eventName || '',
+    data:       JSON.stringify(log),
+    md_content: mdContent
+  };
+  // PATCH 먼저 시도
+  let res = await fetch(`${SB_URL}/rest/v1/soundlogs?id=eq.${log.id}`, {
+    method: 'PATCH',
+    headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify(payload)
+  });
+  const patched = await res.json();
+  // 없으면 POST로 새로 생성
+  if (Array.isArray(patched) && patched.length === 0) {
+    res = await fetch(`${SB_URL}/rest/v1/soundlogs`, {
+      method: 'POST',
+      headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  }
+  if (!res.ok) throw new Error(await res.text());
+}
+
+// 저장 버튼: 해당 일지만 저장/수정
+async function saveAndSync() {
+  const log = getFormData();
+  if (!log) return;
+  localStorage.setItem('soundlogs', JSON.stringify(logs));
+  updateTitle();
+  showToast('저장 중...');
+  try {
+    await sbUpsertLog(log);
+    showToast('✓ 저장 + ☁️ 클라우드 완료');
+  } catch(e) {
+    showToast('✓ 로컬저장 완료 (클라우드 실패)');
+    console.error(e);
+  }
+}
+
+// 불러오기: 날짜 범위 모달 열기
+function gistLoad() {
+  const t = today();
+  const firstDay = t.substring(0,7) + '-01';
+  document.getElementById('drFrom').value = firstDay;
+  document.getElementById('drTo').value   = t;
+  document.getElementById('dateRangeModal').classList.add('show');
+}
+
+function closeDateModal() {
+  document.getElementById('dateRangeModal').classList.remove('show');
+}
+
+async function doDateLoad() {
+  const from = document.getElementById('drFrom').value;
+  const to   = document.getElementById('drTo').value;
+  if (!from || !to) { showToast('⚠️ 날짜를 선택해주세요'); return; }
+  closeDateModal();
+  showToast('☁️ 불러오는 중...');
+  try {
+    const res = await fetch(
+      `${SB_URL}/rest/v1/soundlogs?select=id,data&date=gte.${from}&date=lte.${to}&order=date.desc`,
+      { headers: { 'apikey': SB_KEY, 'Authorization': `Bearer ${SB_KEY}` } }
+    );
+    if (!res.ok) throw new Error('불러오기 실패');
+    const rows = await res.json();
+    if (!rows.length) { showToast('⚠️ 해당 기간 데이터 없음'); return; }
+    const cloudLogs = rows.map(r => JSON.parse(r.data));
+    cloudLogs.forEach(cl => {
+      const idx = logs.findIndex(l => l.id === cl.id);
+      if (idx >= 0) logs[idx] = cl;
+      else logs.push(cl);
+    });
+    localStorage.setItem('soundlogs', JSON.stringify(logs));
+    renderList();
+    showToast(`☁️ ${rows.length}개 일지 불러오기 완료`);
+  } catch(e) { showToast('❌ ' + e.message); }
+}
+
+function exportCurrentMD() {
+  const log = getFormData();
+  if (!log) return;
+  const content  = generateMD(log);
+  const filename = `${log.date}_${(log.eventName||'작업일지').replace(/\s/g,'_')}.md`;
+  const blob = new Blob([content], {type:'text/markdown'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = filename; a.click();
+  showToast('⬇ MD 다운로드 완료');
+}
+
 // ── 초기화 ──
-// 기존 데이터에서 page 초기 표시
 document.getElementById('pageList').style.display = 'flex';
-document.getElementById('pageMdStore').style.display = 'none';
 document.getElementById('pageForm').style.display = 'none';
 renderList();
 </script>
